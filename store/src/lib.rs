@@ -2,10 +2,10 @@
 
 use std::collections::{HashMap, HashSet};
 
+use city::C;
 use dice::DiceRoll;
-use main_city::City;
+use main_city::MainCity;
 use rail::Rail;
-use rail::C;
 use region::Region;
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
@@ -14,6 +14,7 @@ use crate::{rail::RAILROAD_GRAPH, travel_payout::travel_payout};
 type PlayerId = u64;
 pub type Cash = u64;
 
+pub mod city;
 pub mod dice;
 pub mod main_city;
 pub mod rail;
@@ -36,13 +37,6 @@ pub enum InGameStage {
     Movement,
     Purchase,
 }
-
-// #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-// pub enum DiceRollStage {
-//     HomeCityRoll,
-//     DestinationRoll,
-//     MovementRoll,
-// }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Piece {
@@ -76,10 +70,10 @@ pub struct Player {
     pub cash: i64,
     pub name: String,
     pub piece: Piece,
-    pub home_city: Option<City>,
-    pub route_history: Vec<(crate::rail::C, Rail)>,
-    pub start: Option<City>, // Default is home-city
-    pub destination: Option<City>,
+    pub home_city: Option<MainCity>,
+    pub route_history: Vec<(C, Rail)>,
+    pub start: Option<MainCity>, // Default is home-city
+    pub destination: Option<MainCity>,
     pub spaces_left_to_move: Option<u8>, // Default is 0
     pub rails: Vec<Rail>,
     pub engine: Engine,
@@ -112,14 +106,14 @@ pub enum Event {
         region_roll: DiceRoll,
         city_roll: DiceRoll,
         region: Region,
-        city: City,
+        city: MainCity,
     },
     DestinationCityRoll {
         player_id: PlayerId,
         region_roll: DiceRoll,
         city_roll: DiceRoll,
         region: Region,
-        city: City,
+        city: MainCity,
     },
     MovementRoll {
         player_id: PlayerId,

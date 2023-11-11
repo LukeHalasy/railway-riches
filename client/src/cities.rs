@@ -1,8 +1,8 @@
 use leptos::*;
 
 use store::{
+    city::C,
     main_city,
-    rail::C,
     sub_city::{self},
 };
 
@@ -12,7 +12,7 @@ use crate::city::City;
 pub fn Cities() -> impl IntoView {
     view! {
         {
-            main_city::City::cities()
+            main_city::MainCity::cities()
             .iter()
             .map(|n| {
                 view! {
